@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5</TargetFramework>
+    <AssemblyName>Microsoft.Azure.Functions.Worker.Extensions.Http.Authentication.JwtBearer</AssemblyName>
+    <RootNamespace>Microsoft.Azure.Functions.Worker.Http</RootNamespace>
+    <PackageId>Community.Azure.Functions.Worker.Extensions.Http.Authentication.JwtBearer</PackageId>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="1.2.0" />
+  </ItemGroup>
+
+</Project>
