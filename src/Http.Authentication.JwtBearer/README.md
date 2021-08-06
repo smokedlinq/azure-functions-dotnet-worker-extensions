@@ -1,5 +1,7 @@
 ﻿# Azure Function App - .NET Worker - JwtBearer Authentication Middleware
 
+Enable JwtBearer authentication for HttpTrigger requests.
+
 ## Usage
 
 Example setup, configuration, and usage with an AzureAD (v2.0) JWT bearer protected endpoint.
