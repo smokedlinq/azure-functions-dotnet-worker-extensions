@@ -12,7 +12,7 @@ namespace Microsoft.Azure.Functions.Worker.Http
     internal static class MethodLocator
     {
         // https://github.com/Azure/azure-functions-dotnet-worker/blob/main/src/DotNetWorker.Core/Invocation/DefaultMethodInfoLocator.cs
-        private static readonly Regex _entryPointRegex = new Regex("^(?<typename>.*)\\.(?<methodname>\\S*)$");
+        private static readonly Regex _entryPointRegex = new("^(?<typename>.*)\\.(?<methodname>\\S*)$");
 
         public static MethodInfo GetMethod(this FunctionDefinition definition)
         {
