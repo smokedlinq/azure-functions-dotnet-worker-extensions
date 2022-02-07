@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31521.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.Authentication.JwtBearer", "src\Http.Authentication.JwtBearer\Http.Authentication.JwtBearer.csproj", "{96EED901-92B2-4460-9D9D-FF981D5DFA66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http.ProblemDetails", "src\Http.ProblemDetails\Http.ProblemDetails.csproj", "{4A8E996C-9FC8-42F6-941B-0B967600D1D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http", "src\Http\Http.csproj", "{4A8E996C-9FC8-42F6-941B-0B967600D1D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
