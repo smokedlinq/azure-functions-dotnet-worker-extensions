@@ -1,11 +1,24 @@
+name: Continuous Integration
+
 on:
   push:
-    branches: [ main ]
+    branches:
+    - main
   pull_request:
-    types: [opened, synchronize, reopened]
-    branches: [ main ]
-  schedule:
-  - cron: 0 12 * * 1
+    branches:
+    - main
+
+permissions:
+  contents: read
+  security-events: write
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: pwsh
 
 env:
   DOTNET_NOLOGO: true
@@ -13,18 +26,27 @@ env:
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-      with:
-        fetch-depth: 0
+    - uses: actions/checkout@v2
 
-    - name: Setup .NET Core 6.0.x
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
+    - uses: ./.github/actions/build
+  
+    - run: dotnet test --configuration Release --logger 'console;verbosity=detailed' /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
-    - name: Build
-      run: dotnet build --configuration Release
+    - uses: snyk/actions/dotnet@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: >-
+          --all-projects
+          --detection-depth=8
+          --severity-threshold=high
+          --sarif-file-output=snyk.sarif
+        command: test
+
+    - uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: snyk.sarif

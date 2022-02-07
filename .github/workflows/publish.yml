@@ -1,41 +1,50 @@
+name: Publish
+
 on:
   push:
-    tags: [ 'v*' ]
+    tags: 
+    - 'v*'
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 jobs:
-  build:
-    name: Build
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-      with:
-        fetch-depth: 0
+    - uses: actions/checkout@v2
 
-    - name: Setup .NET Core 6.0.x
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
+    - uses: ./.github/actions/build
 
-    - name: Build and publish
+    - uses: smokedlinq/powershell-devops@v0
+
+    - run: ./.github/workflows/scripts/Set-VersionVariables.ps1
       shell: pwsh
-      run: |
-        dotnet build --configuration Release
-        dotnet pack --configuration Release -p:Version=$($env:GITHUB_REF -replace '^refs/tags/v','') --output ./publish
-        cd ./publish
-        dotnet nuget push "*.nupkg" -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
-        dotnet nuget push "*.nupkg" -s https://nuget.pkg.github.com/${{ github.repository_owner }} --skip-duplicate --no-symbols true --api-key ${{ secrets.GITHUB_TOKEN }}
+      
+    - run: dotnet pack --configuration Release -p:Version=$PACKAGE_VERSION --output ./publish
 
-    - name: Create release
-      uses: actions/create-release@master
+    - run: dotnet nuget push "*.nupkg" -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      working-directory: ./publish
+
+    - run: dotnet nuget push "*.nupkg" -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --skip-duplicate --no-symbols true --api-key ${{ secrets.GITHUB_TOKEN }}
+      working-directory: ./publish
+
+    - uses: actions/create-release@master
+      continue-on-error: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
         draft: false
-        prerelease: false
+        prerelease: ${{ env.IS_PRERELEASE }}
