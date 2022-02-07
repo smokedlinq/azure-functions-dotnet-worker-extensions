@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>Microsoft.Azure.Functions.Worker.Extensions.Http.Authentication.JwtBearer</AssemblyName>
+    <AssemblyName>Community.Azure.Functions.Worker.Extensions.Http.Authentication.JwtBearer</AssemblyName>
     <RootNamespace>Microsoft.Azure.Functions.Worker.Http</RootNamespace>
     <PackageId>Community.Azure.Functions.Worker.Extensions.Http.Authentication.JwtBearer</PackageId>
     <Nullable>enable</Nullable>
