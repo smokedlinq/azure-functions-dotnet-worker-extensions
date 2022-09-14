@@ -25,6 +25,8 @@ public static class JwtExtensions
 
         builder.UseMiddleware<JwtBearerAuthenticationMiddleware>();
 
+        builder.Services.Configure<WorkerOptions>(options => options.InputConverters.Register<ClaimsPrincipalConverter>());
+
         return builder;
     }
 
